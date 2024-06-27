@@ -23,9 +23,13 @@ function preprocess_text(text) {
         }
     })
     var padded_text = new Array(200).fill(0);
+    for (var i = 200, k = 0; i > (200 - tokenized_text.length), k < tokenized_text.length; i--, k++) {
+        padded_text[i-1] = tokenized_text[k];
+    }
+
     console.log(tokenizer);
     console.log(padded_text);
-    return text;
+    return tf.tensor2d([padded_text], [1, 200]);
 }
 
 async function loadModel() {
@@ -33,23 +37,29 @@ async function loadModel() {
     return model;
 }
 
-function processModel(sentence) {
-    prediction = model.predict(tensorInput);
+function predictEmotion(sentence) {
+    prediction = model.predict(sentence);
 
     return prediction;
 }
 
-function getSentence() {
+async function getSentence() {
     var inputElem = document.getElementById("input")
     var sentence = inputElem.value;
     inputElem.value = "";
-    console.log(preprocess_text(sentence));
+
+    var preprocessed_text = preprocess_text(sentence);
+    prediction = predictEmotion(preprocessed_text);
+    prediction = prediction.arraySync();
+    
+    console.log(prediction);
 }
 
 
 async function init() {
     tokenizer = await loadTokenizer();
     model = await loadModel();
+    console.log("Model and tokenizer loaded successfully.");
 }
 
 document.addEventListener('DOMContentLoaded', (event) => {
