@@ -4,18 +4,27 @@ async function loadTokenizer() {
     let tknzr = fetch(vocabPath).then(response => {
         return response.json();
     })
-    return tknzr;
-  }
 
-function preprocess_text(text){
+    return tknzr;
+}
+
+function preprocess_text(text) {
     text = text.toLowerCase();
     text = text.replace(/[0-9]+/g, '') // Remove digits
-                .replace(/'/g, '') // Remove apostrophes
-                .replace(/["#$%&()*+,-./:;<=>@[\\\]^_`{|}~\t\n]/g, '') // Remove punctuation and whitespace characters
-                .replace(/@[^\s]+/g, '') // Remove mentions
-                .replace('?', ' ?');
+        .replace(/'/g, '') // Remove apostrophes
+        .replace(/["#$%&()*+,-./:;<=>@[\\\]^_`{|}~\t\n]/g, '') // Remove punctuation and whitespace characters
+        .replace(/@[^\s]+/g, '') // Remove mentions
+        .replace('?', ' ?');
     var split_text = text.split(' ');
+    var tokenized_text = [];
+    split_text.forEach((word) => {
+        if (tokenizer[word] != undefined) {
+            tokenized_text.push(parseInt(tokenizer[word]));
+        }
+    })
+    var padded_text = new Array(200).fill(0);
     console.log(tokenizer);
+    console.log(padded_text);
     return text;
 }
 
@@ -24,10 +33,10 @@ async function loadModel() {
     return model;
 }
 
-function processModel(sentence){
-    prediction  = model.predict(tensorInput);
+function processModel(sentence) {
+    prediction = model.predict(tensorInput);
 
-    return prediction; 
+    return prediction;
 }
 
 function getSentence() {
@@ -40,7 +49,7 @@ function getSentence() {
 
 async function init() {
     tokenizer = await loadTokenizer();
-    model = await loadModel();   
+    model = await loadModel();
 }
 
 document.addEventListener('DOMContentLoaded', (event) => {
