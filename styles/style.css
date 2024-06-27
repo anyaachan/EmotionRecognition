@@ -31,3 +31,13 @@ html {
     border-radius: 4rem;
     padding: 0 2rem;
 }
+
+#predicted-class {
+    font-size: 2rem;
+    margin-top: 4rem;
+}
+
+#predicted-class-probability {
+    font-size: 2rem;
+    margin-top: 2rem;
+}

@@ -1,23 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Emotion Recognition</title>
     <link rel="stylesheet" href="styles/style.css">
-    <link rel="icon" type="image/x-icon" href = "">
+    <link rel="icon" type="image/x-icon" href="">
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
     <script src="scripts/app.js"></script>
 </head>
+
 <body>
-    <div class = "main">
-        <p class = "title">Emotion Recognition Neural Network</p>
+    <div class="main">
+        <p class="title">Emotion Recognition Neural Network</p>
         <div class="text-input">
             <input type="text" id="input" placeholder="Enter a sentence">
         </div>
         <div class="results">
             <div id="predicted-class"></div>
+            <div id="predicted-class-probability"></div>
             <div id="predicted-class-graph"></div>
         </div>
     </div>
 </body>
+
 </html>

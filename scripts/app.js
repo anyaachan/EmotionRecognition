@@ -1,4 +1,6 @@
 vocabPath = 'model/tokenizer_dictionary.json';
+classes = ['anger', 'fear', 'joy', 'love', 'neutral',
+    'sadness', 'surprise']
 
 async function loadTokenizer() {
     let tknzr = fetch(vocabPath).then(response => {
@@ -43,7 +45,13 @@ function predictEmotion(sentence) {
     return prediction;
 }
 
-async function getSentence() {
+function interpretPrediction(prediction) {
+    var max = Math.max(...prediction);
+    var index = prediction.indexOf(max);
+    return [classes[index], max];
+}
+
+async function evaluateSentence() {
     var inputElem = document.getElementById("input")
     var sentence = inputElem.value;
     inputElem.value = "";
@@ -51,8 +59,15 @@ async function getSentence() {
     var preprocessed_text = preprocess_text(sentence);
     prediction = predictEmotion(preprocessed_text);
     prediction = prediction.arraySync();
-    
-    console.log(prediction);
+
+    predictionMainClass = interpretPrediction(prediction[0]);
+    probabilityOfMainClass  = Math.round(predictionMainClass[1] * 100);
+    document.getElementById("predicted-class").innerText =  predictionMainClass[0].charAt(0).toUpperCase() + 
+                                                            predictionMainClass[0].slice(1);
+    document.getElementById("predicted-class-probability").innerText =  " Probability: " + 
+                                                                        probabilityOfMainClass + 
+                                                                        "%"                                                    
+    console.log(prediction, interpretPrediction(prediction[0]));
 }
 
 
@@ -68,7 +83,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     document.getElementById("input").addEventListener("keypress", function (event) {
         if (event.key === "Enter") {
             event.preventDefault();
-            getSentence();
+            evaluateSentence();
         }
     });
 });
