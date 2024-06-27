@@ -15,7 +15,7 @@ function preprocess_text(text){
                 .replace(/@[^\s]+/g, '') // Remove mentions
                 .replace('?', ' ?');
     var split_text = text.split(' ');
-    console.log(tknzr);
+    console.log(tokenizer);
     return text;
 }
 
@@ -40,7 +40,6 @@ function getSentence() {
 
 async function init() {
     tokenizer = await loadTokenizer();
-
     model = await loadModel();   
 }
 
