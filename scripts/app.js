@@ -25,8 +25,9 @@ function preprocess_text(text) {
         }
     })
     var padded_text = new Array(200).fill(0);
-    for (var i = 200, k = 0; i > (200 - tokenized_text.length), k < tokenized_text.length; i--, k++) {
-        padded_text[i-1] = tokenized_text[k];
+    console.log(tokenized_text);
+    for (var i = (200 - tokenized_text.length), k = 0; i < 200, k < tokenized_text.length; i++, k++) {
+        padded_text[i] = tokenized_text[k];
     }
 
     console.log(tokenizer);
@@ -52,6 +53,10 @@ function interpretPrediction(prediction) {
 }
 
 async function evaluateSentence() {
+    if (probabilityChart != undefined) {
+        probabilityChart.destroy();
+    }
+
     var inputElem = document.getElementById("input")
     var sentence = inputElem.value;
     inputElem.value = "";
@@ -61,15 +66,31 @@ async function evaluateSentence() {
     prediction = prediction.arraySync();
 
     predictionMainClass = interpretPrediction(prediction[0]);
-    probabilityOfMainClass  = Math.round(predictionMainClass[1] * 100);
-    document.getElementById("predicted-class").innerText =  predictionMainClass[0].charAt(0).toUpperCase() + 
-                                                            predictionMainClass[0].slice(1);
-    document.getElementById("predicted-class-probability").innerText =  " Probability: " + 
-                                                                        probabilityOfMainClass + 
-                                                                        "%"                                                    
+    probabilityOfMainClass = Math.round(predictionMainClass[1] * 100);
+    document.getElementById("predicted-class").innerText = predictionMainClass[0].charAt(0).toUpperCase() +
+        predictionMainClass[0].slice(1);
+    document.getElementById("predicted-class-probability").innerText = " Probability: " +
+        probabilityOfMainClass +
+        "%";
     console.log(prediction, interpretPrediction(prediction[0]));
-}
 
+    var probabilityChart = new Chart("probabilityChart", {
+        type: "bar",
+        data: {
+            labels: classes,
+            datasets: [{
+                data: prediction[0]
+            }]
+        },
+        options: {
+            legend: { display: false },
+            title: {
+                display: true,
+                text: "Emotion Probability Distribution"
+            }
+        }
+    });
+}
 
 async function init() {
     tokenizer = await loadTokenizer();

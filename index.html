@@ -7,6 +7,9 @@
     <link rel="stylesheet" href="styles/style.css">
     <link rel="icon" type="image/x-icon" href="">
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+    <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
+    </script>
     <script src="scripts/app.js"></script>
 </head>
 
@@ -19,7 +22,9 @@
         <div class="results">
             <div id="predicted-class"></div>
             <div id="predicted-class-probability"></div>
-            <div id="predicted-class-graph"></div>
+            <div id="predicted-class-graph">
+                <canvas id="probabilityChart" style="width:100%;max-width:600px"></canvas>
+            </div>
         </div>
     </div>
 </body>
