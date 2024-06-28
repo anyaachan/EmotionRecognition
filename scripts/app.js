@@ -1,6 +1,6 @@
 vocabPath = 'model/tokenizer_dictionary.json';
-classes = ['anger', 'fear', 'joy', 'love', 'neutral',
-    'sadness', 'surprise']
+classes = ['Anger', 'Fear', 'Joy', 'Love', 'Neutral', 'Sadness']
+probabilityChart = null;
 
 async function loadTokenizer() {
     let tknzr = fetch(vocabPath).then(response => {
@@ -53,10 +53,6 @@ function interpretPrediction(prediction) {
 }
 
 async function evaluateSentence() {
-    if (probabilityChart != undefined) {
-        probabilityChart.destroy();
-    }
-
     var inputElem = document.getElementById("input")
     var sentence = inputElem.value;
     inputElem.value = "";
@@ -74,7 +70,11 @@ async function evaluateSentence() {
         "%";
     console.log(prediction, interpretPrediction(prediction[0]));
 
-    var probabilityChart = new Chart("probabilityChart", {
+    if (probabilityChart) {
+        probabilityChart.destroy();
+    }
+
+    probabilityChart = new Chart("probabilityChart", {
         type: "bar",
         data: {
             labels: classes,
